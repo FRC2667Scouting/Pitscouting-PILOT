@@ -1,1 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRC Scouting Form</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 16px; max-width: 500px; background: #121212; color: #fff; }
+    label { display: block; margin-top: 12px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 4px; box-sizing: border-box; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff; font-size: 16px; }
+    button { margin-top: 20px; padding: 14px; font-size: 18px; font-weight: bold; width: 100%; border: none; border-radius: 6px; background: #00e676; color: #000; cursor: pointer; }
+    #qrcode { margin-top: 24px; text-align: center; display: flex; justify-content: center; background: #fff; padding: 16px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>FRC Scouting Entry</h2>
+  <form id="scoutForm">
+    <label>Team Number:</label>
+    <input type="number" id="team" required>
 
+    <label>Interviewer Name:</label>
+    <input type="text" id="interviewer" placeholder="e.g. Madusa, Icarus, Calypso" required>
+
+    <label>Robot Name:<label>
+    <input type="text" id="name" placeholder="e.g. Optimus, Megatron, Jormungandr" required>
+
+    <label>Is the robot cleared?<label>
+    <input type="text" id="compete" placeholder="e.g. Yes, No" required>
+
+    <label>If no, why?<label>
+    <input type="text" id="why">
+
+    <label>Preffered Starting Position:<label>
+    <input type="text" id="start" placeholder="e.g. Center, Bump, Trench" required>
+
+    <label>Shooter Type:<label>
+    <input type="text" id="shooter" placeholder="e.g. Fixed, Turret, etc." required>
+
+    <label>Trench/Bump Bot:<label>
+    <input type="text" id="trenchbump" placeholder="e.g. Bump, Trench, Both" required>
+
+    <label>Passer Bot?<label>
+    <input type="text" id="passer" placeholder="e.g. Yes, No" required>
+
+    <label>Climb in auto?<label>
+    <input type="text" id="autoclimb" placeholder="e.g. Yes, No" required>
+
+    <label>Where if Climb?<label>
+    <input type="text" id="autoclimbloc" placeholder="e.g. Center. Leftside">
+
+    <label>Score fuel in auto?<label>
+    <input type="text" id="autofuel" placeholder="e.g. Yes, No" required>
+
+    <label># of fuel scored in Auto:<label>
+    <input type="number" id="autofuelscore" placeholder="e.g. 0, 10, 20" required>
+
+    <label>Cycle Time:<label>
+    <input type="number" id="cycletime" placeholder="e.g. 5, 15, 76" required>
+
+    <label>Storage Capacity:<label>
+    <input type="number" id="storage" placeholder="e.g. 20, 45, 60" required>
+
+    <label>Accuracy (%):<label>
+    <input type="number" id="accuracy" placeholder="e.g. 46, 57, 89" required>
+
+    <label>Highest Climb:<label>
+    <input type="text" id="climbheight" placeholder="e.g. 0, L1, L2, L3" required>
+
+    <label>Location of Climb (If climb):<label>
+    <input  type="text" id="climbloc" placeholder="e.g. Center, Left, Right" required>
+
+    <label>Extra Notes:</label>
+    <input type="text" id="note" placeholder="e.g. Fast cllimber, Good defense, etc." required>
+
+    <button type="button" onclick="generateQR()">Generate QR Code</button>
+  </form>
+
+  <div id="qrcode"></div>
+
+  <script>
+    let qrcode = new QRCode(document.getElementById("qrcode"), { width: 250, height: 250 });
+
+    function generateQR() {
+      const team = document.getElementById('team').value;
+      const interviewer = document.getElementById('interviewer').value;
+      const name = document.getElementById('name').value;
+      const compete = document.getElementById('compete').value;
+      const why = document.getElementById('why').value;
+      const start = document.getElementById('start').value;
+      const shooter = document.getElementById('shooter').value;
+      const trenchbump = document.getElementById('trenchbump').value;
+      const passer = document.getElementById('passer').value;
+      const autoclimb = document.getElementById('autoclimb').value;
+      const autoclimbloc = document.getElementById('autoclimbloc').value;
+      const autofuel = document.getElementById('autofuel').value;
+      const autofuelscore = document.getElementById('autofuelscore').value;
+      const cycletime = document.getElementById('cycletime').value;
+      const storage = document.getElementById('storage').value;
+      const accuracy = document.getElementById('accuracy').value;
+      const climbheight = document.getElementById('climbheight').value;
+      const climbloc = document.getElementById('climbloc').value;
+      const note = document.getElementById('note').value;
+
+      // Delimited Payload String
+      const payload = `${team}|${interviewer}|${name}|${compete}|${why}|${start}|${shooter}|${trenchbump}|${passer}|${autoclimb}|${autoclimbloc}|${autofuel}|${autofuelscore}|${cycletime}|${storage}|${accuracy}|${climbheight}|${climbloc}|${note}`;
+      
+      qrcode.clear();
+      qrcode.makeCode(payload);
+    }
+  </script>
+</body>
+</html>
