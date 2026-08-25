@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scouting Lead Intake Station</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; text-align: center; margin: 20px; background: #f4f4f9; }
+    #reader { width: 450px; margin: 0 auto; border: 2px solid #ccc; border-radius: 8px; background: #fff; }
+    #status { margin-top: 20px; font-weight: bold; font-size: 20px; color: #2e7d32; }
+  </style>
+</head>
+<body>
+  <h2>Lead QR Scanner Intake</h2>
+  <div id="reader"></div>
+  <div id="status">Ready to scan...</div>
+
+  <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCLrdPtwIyc5qcLLldc0N2EIz7UxrU-BtoFd3H7AC4Re8z9xy2z2uae61YPSSeo8VI/exec"; 
+    let lastScanned = "";
+
+    function onScanSuccess(decodedText) {
+      if (decodedText === lastScanned) return; 
+      lastScanned = decodedText;
+
+      document.getElementById('status').innerText = "Processing Scan...";
+      
+      const parts = decodedText.split('|');
+      if (parts.length < 5) {
+        document.getElementById('status').innerText = "Invalid QR Payload Format";
+        return;
+      }
+
+      const payload = {
+        team: parts[0],
+        interviewer: parts[1],
+        name: parts[2],
+        compete: parts[3],
+        why: parts[4],
+        start: parts[5],
+        shooter: parts[6],
+        trenchbump: parts[7],
+        passer: parts[8],
+        autoclimb: parts[9],
+        autoclimbloc: parts[10],
+        autofuel: parts[11],
+        autofuelscore: parts[12],
+        cycletime: parts[13],
+        storage: parts[14],
+        accuracy: parts[15],
+        climbheight: parts[16],
+        climbloc: parts[17],
+        note: parts[18]
+      };
+
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(() => {
+        document.getElementById('status').innerText = `Logged Match ${parts[0]} - Team ${parts[1]}!`;
+        setTimeout(() => { lastScanned = ""; }, 3000); 
+      }).catch(err => {
+        document.getElementById('status').innerText = "Error posting data to sheet.";
+      });
+    }
+
+    const html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess);
+  </script>
+</body>
+</html>
