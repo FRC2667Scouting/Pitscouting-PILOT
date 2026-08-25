@@ -59,7 +59,7 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       }).then(() => {
-        document.getElementById('status').innerText = `Logged Match ${parts[0]} - Team ${parts[1]}!`;
+        document.getElementById('status').innerText = `Logged Team ${parts[0]} - Scouted by ${parts[1]}!`;
         setTimeout(() => { lastScanned = ""; }, 3000); 
       }).catch(err => {
         document.getElementById('status').innerText = "Error posting data to sheet.";
